@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useT } from "@/components/i18n/LocaleProvider";
 import { DataTestId } from "@/lib/constants/data-test-id";
 import {
   TUTORIAL_SLIDE_KEYS,
-  TUTORIAL_SLIDES,
+  TUTORIAL_SLIDE_MESSAGE_KEYS,
   type TutorialSlideKey,
 } from "@/components/tutorial/tour-copy";
 
@@ -14,9 +15,10 @@ type IntroSliderProps = {
 };
 
 export function IntroSlider({ onSkip, onDone }: IntroSliderProps) {
+  const t = useT();
   const [index, setIndex] = useState(0);
   const slideKey = TUTORIAL_SLIDE_KEYS[index] as TutorialSlideKey;
-  const slide = TUTORIAL_SLIDES[slideKey];
+  const slide = TUTORIAL_SLIDE_MESSAGE_KEYS[slideKey];
   const isLast = index === TUTORIAL_SLIDE_KEYS.length - 1;
 
   useEffect(() => {
@@ -52,9 +54,9 @@ export function IntroSlider({ onSkip, onDone }: IntroSliderProps) {
           id="tutorial-slider-title"
           className="text-lg font-semibold text-zinc-50"
         >
-          {slide.title}
+          {t(slide.title)}
         </h2>
-        <p className="mt-2 text-sm text-zinc-400">{slide.body}</p>
+        <p className="mt-2 text-sm text-zinc-400">{t(slide.body)}</p>
         <div className="mt-6 flex items-center justify-between gap-3">
           <button
             data-testid={DataTestId.TutorialSkip}
@@ -62,7 +64,7 @@ export function IntroSlider({ onSkip, onDone }: IntroSliderProps) {
             type="button"
             className="text-sm text-zinc-500 hover:text-zinc-300"
           >
-            Skip
+            {t("tutorial.skip")}
           </button>
           <div className="flex gap-2">
             {index > 0 ? (
@@ -72,7 +74,7 @@ export function IntroSlider({ onSkip, onDone }: IntroSliderProps) {
                 type="button"
                 className="rounded-lg border border-zinc-700 px-3 py-1.5 text-sm text-zinc-200 hover:bg-zinc-900"
               >
-                Back
+                {t("tutorial.back")}
               </button>
             ) : null}
             <button
@@ -87,7 +89,7 @@ export function IntroSlider({ onSkip, onDone }: IntroSliderProps) {
               type="button"
               className="rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-500"
             >
-              {isLast ? "Continue" : "Next"}
+              {isLast ? t("tutorial.continue") : t("tutorial.next")}
             </button>
           </div>
         </div>

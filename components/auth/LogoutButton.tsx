@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { settingsOutlineButtonClassName } from "@/components/dashboard/settings-button-styles";
+import { useT } from "@/components/i18n/LocaleProvider";
 import {
   topNavMobileSecondaryClassName,
   topNavSecondaryClassName,
@@ -25,6 +26,7 @@ export function LogoutButton({
   testId = DataTestId.DashboardLogoutButton,
   variant = "nav",
 }: LogoutButtonProps = {}) {
+  const t = useT();
   const router = useRouter();
   const [isActive, setIsActive] = useState(false);
 
@@ -52,7 +54,7 @@ export function LogoutButton({
       data-testid={testId ?? undefined}
       className={LOGOUT_VARIANT_CLASS[variant]}
     >
-      Log out
+      {t("nav.logout")}
     </button>
   );
 }

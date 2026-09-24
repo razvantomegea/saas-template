@@ -1,12 +1,38 @@
 import { authClient } from "@/lib/better-auth/client";
 
+export type PasswordResetErrorCode =
+  | "rate_limited"
+  | "send_failed"
+  | "reset_failed"
+  | "generic";
+
 export type PasswordResetRequestResult =
   | { type: "success" }
-  | { type: "error"; message: string };
+  | { type: "error"; code: PasswordResetErrorCode; message?: string };
 
 export type PasswordResetSubmitResult =
   | { type: "success" }
-  | { type: "error"; message: string };
+  | { type: "error"; code: PasswordResetErrorCode; message?: string };
+
+const PASSWORD_RESET_ERROR_KEYS: Record<PasswordResetErrorCode, string> = {
+  rate_limited: "auth.rateLimited",
+  send_failed: "auth.resetEmailFailed",
+  reset_failed: "auth.resetFailed",
+  generic: "auth.genericError",
+};
+
+/** Prefer the provider message for send/reset failures; otherwise use i18n. */
+export function passwordResetErrorMessage(
+  t: (path: string) => string,
+  code: PasswordResetErrorCode,
+  message?: string,
+): string {
+  const allowProviderMessage =
+    code === "send_failed" || code === "reset_failed";
+  return allowProviderMessage && message
+    ? message
+    : t(PASSWORD_RESET_ERROR_KEYS[code]);
+}
 
 function isRateLimitedError(message: string | undefined): boolean {
   if (!message) {
@@ -26,22 +52,16 @@ export async function requestPasswordResetEmail(params: {
     });
 
     if (result.error) {
-      const message = result.error.message ?? "Failed to send reset email";
+      const message = result.error.message;
       if (isRateLimitedError(message)) {
-        return {
-          type: "error",
-          message: "Too many requests. Please wait a moment and try again.",
-        };
+        return { type: "error", code: "rate_limited" };
       }
-      return { type: "error", message };
+      return { type: "error", code: "send_failed", message };
     }
 
     return { type: "success" };
   } catch {
-    return {
-      type: "error",
-      message: "Something went wrong. Please try again.",
-    };
+    return { type: "error", code: "generic" };
   }
 }
 
@@ -58,15 +78,13 @@ export async function submitPasswordReset(params: {
     if (result.error) {
       return {
         type: "error",
-        message: result.error.message ?? "Failed to reset password",
+        code: "reset_failed",
+        message: result.error.message,
       };
     }
 
     return { type: "success" };
   } catch {
-    return {
-      type: "error",
-      message: "Something went wrong. Please try again.",
-    };
+    return { type: "error", code: "generic" };
   }
 }

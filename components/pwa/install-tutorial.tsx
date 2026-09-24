@@ -3,32 +3,34 @@
 import { useLayoutEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 
+import { useT } from "@/components/i18n/LocaleProvider";
 import { useInstallTutorial } from "@/components/pwa/install-tutorial-context";
 import { APP_NAME } from "@/lib/pwa/config";
 
-function IosSteps() {
+function IosSteps({ appName }: { appName: string }) {
+  const t = useT();
   return (
     <ol className="space-y-2 text-sm text-zinc-300">
-      <li>1. Tap the Share icon in Safari&apos;s toolbar.</li>
-      <li>2. Scroll down and tap &ldquo;Add to Home Screen&rdquo;.</li>
-      <li>3. Tap &ldquo;Add&rdquo; to install {APP_NAME}.</li>
+      <li>{t("pwa.iosStep1")}</li>
+      <li>{t("pwa.iosStep2")}</li>
+      <li>{t("pwa.iosStep3", { appName })}</li>
     </ol>
   );
 }
 
-function AndroidFallbackSteps() {
+function AndroidFallbackSteps({ appName }: { appName: string }) {
+  const t = useT();
   return (
     <ol className="space-y-2 text-sm text-zinc-300">
-      <li>1. Open the browser menu.</li>
-      <li>
-        2. Tap &ldquo;Install app&rdquo; or &ldquo;Add to Home screen&rdquo;.
-      </li>
-      <li>3. Confirm to install {APP_NAME}.</li>
+      <li>{t("pwa.androidStep1")}</li>
+      <li>{t("pwa.androidStep2")}</li>
+      <li>{t("pwa.androidStep3", { appName })}</li>
     </ol>
   );
 }
 
 export function InstallTutorial() {
+  const t = useT();
   const {
     open,
     canInstall,
@@ -75,7 +77,7 @@ export function InstallTutorial() {
   return createPortal(
     <div className="fixed inset-0 z-[80] flex items-end justify-center">
       <button
-        aria-label="Close"
+        aria-label={t("common.close")}
         className="absolute inset-0 bg-black/60"
         onClick={hide}
         type="button"
@@ -94,14 +96,12 @@ export function InstallTutorial() {
               id="pwa-install-title"
               className="text-lg font-semibold text-zinc-50"
             >
-              Install {APP_NAME}
+              {t("pwa.installTitle", { appName: APP_NAME })}
             </h2>
-            <p className="text-sm text-zinc-400">
-              Add it to your home screen for quick access.
-            </p>
+            <p className="text-sm text-zinc-400">{t("pwa.installSubtitle")}</p>
           </div>
           <button
-            aria-label="Close"
+            aria-label={t("common.close")}
             className="text-zinc-500 hover:text-zinc-300"
             onClick={hide}
             type="button"
@@ -111,25 +111,27 @@ export function InstallTutorial() {
         </div>
 
         <div>
-          {platform === "ios" ? <IosSteps /> : null}
+          {platform === "ios" ? <IosSteps appName={APP_NAME} /> : null}
           {platform === "android-chromium" && deferredPrompt ? (
             <div className="space-y-3">
               <p className="text-sm text-zinc-400">
-                Install for a faster, full-screen experience.
+                {t("pwa.nativeInstallBody")}
               </p>
               <button
                 className="w-full rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-emerald-500"
                 onClick={() => void onNativeInstall()}
                 type="button"
               >
-                Install app
+                {t("pwa.installButton")}
               </button>
             </div>
           ) : null}
           {platform === "android-chromium" && !deferredPrompt ? (
-            <AndroidFallbackSteps />
+            <AndroidFallbackSteps appName={APP_NAME} />
           ) : null}
-          {platform === "other" ? <AndroidFallbackSteps /> : null}
+          {platform === "other" ? (
+            <AndroidFallbackSteps appName={APP_NAME} />
+          ) : null}
         </div>
 
         <div className="mt-5 text-center">
@@ -138,7 +140,7 @@ export function InstallTutorial() {
             onClick={dismiss}
             type="button"
           >
-            Not now
+            {t("pwa.notNow")}
           </button>
         </div>
       </div>

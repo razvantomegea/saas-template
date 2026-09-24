@@ -4,7 +4,7 @@ export const AUTH_INPUT_CLASS_NAME =
 export const AUTH_SUBMIT_CLASS_NAME =
   "w-full rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-emerald-500 disabled:opacity-50";
 
-export const PASSWORD_UPDATED_MESSAGE =
-  "Your password was updated. You can sign in now.";
+/** Query-param code resolved via `auth.passwordUpdated` in AuthForm. */
+export const PASSWORD_UPDATED_MESSAGE_CODE = "passwordUpdated";
 
 export const MIN_PASSWORD_LENGTH = 8;

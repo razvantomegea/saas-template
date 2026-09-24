@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useState } from "react";
+import { useT } from "@/components/i18n/LocaleProvider";
 import { DataTestId } from "@/lib/constants/data-test-id";
 import {
-  TUTORIAL_SPOTLIGHT,
+  TUTORIAL_SPOTLIGHT_MESSAGE_KEYS,
   TUTORIAL_SPOTLIGHT_KEYS,
   type TutorialSpotlightKey,
 } from "@/components/tutorial/tour-copy";
@@ -39,6 +40,7 @@ function measureTarget(selector: string): Rect | null {
 }
 
 export function SpotlightTour({ onFinish, onSkip }: SpotlightTourProps) {
+  const t = useT();
   const [index, setIndex] = useState(0);
   const [rect, setRect] = useState<Rect | null>(null);
 
@@ -46,7 +48,7 @@ export function SpotlightTour({ onFinish, onSkip }: SpotlightTourProps) {
     TUTORIAL_SPOTLIGHT_KEYS[
       Math.min(index, TUTORIAL_SPOTLIGHT_KEYS.length - 1)
     ] ?? "nav-home";
-  const copy = TUTORIAL_SPOTLIGHT[step as TutorialSpotlightKey];
+  const copy = TUTORIAL_SPOTLIGHT_MESSAGE_KEYS[step as TutorialSpotlightKey];
   const isLast = index >= TUTORIAL_SPOTLIGHT_KEYS.length - 1;
 
   useLayoutEffect(() => {
@@ -133,9 +135,9 @@ export function SpotlightTour({ onFinish, onSkip }: SpotlightTourProps) {
           {index + 1} / {TUTORIAL_SPOTLIGHT_KEYS.length}
         </p>
         <h3 className="mt-1 text-sm font-semibold text-zinc-50">
-          {copy.title}
+          {t(copy.title)}
         </h3>
-        <p className="mt-1 text-sm text-zinc-400">{copy.body}</p>
+        <p className="mt-1 text-sm text-zinc-400">{t(copy.body)}</p>
         <div className="mt-4 flex items-center justify-between gap-3">
           <button
             data-testid={DataTestId.TutorialSkip}
@@ -143,7 +145,7 @@ export function SpotlightTour({ onFinish, onSkip }: SpotlightTourProps) {
             type="button"
             className="text-sm text-zinc-500 hover:text-zinc-300"
           >
-            Skip
+            {t("tutorial.skip")}
           </button>
           <div className="flex gap-2">
             {index > 0 ? (
@@ -153,7 +155,7 @@ export function SpotlightTour({ onFinish, onSkip }: SpotlightTourProps) {
                 type="button"
                 className="rounded-lg border border-zinc-700 px-3 py-1.5 text-sm text-zinc-200 hover:bg-zinc-900"
               >
-                Back
+                {t("tutorial.back")}
               </button>
             ) : null}
             <button
@@ -168,7 +170,7 @@ export function SpotlightTour({ onFinish, onSkip }: SpotlightTourProps) {
               type="button"
               className="rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-500"
             >
-              {isLast ? "Done" : "Next"}
+              {isLast ? t("tutorial.done") : t("tutorial.next")}
             </button>
           </div>
         </div>

@@ -2,6 +2,7 @@
 
 import { LocaleSwitcher } from "@/components/i18n/LocaleSwitcher";
 import { LocalizedLink } from "@/components/i18n/LocalizedLink";
+import { useT } from "@/components/i18n/LocaleProvider";
 import {
   TopNavLinkList,
   type TopNavLinkItem,
@@ -16,19 +17,20 @@ import {
   topNavSecondaryClassName,
 } from "@/components/layout/top-nav-styles";
 
-const MARKETING_NAV_LINKS: TopNavLinkItem[] = [
-  { href: "/pricing", label: "Pricing" },
-  { href: "/help", label: "Help" },
-];
-
 export function MarketingHeader() {
+  const t = useT();
+  const marketingNavLinks: TopNavLinkItem[] = [
+    { href: "/pricing", label: t("nav.pricing") },
+    { href: "/help", label: t("nav.help") },
+  ];
+
   return (
     <TopNavShell logoHref="/" mobileNavId="marketing-nav-mobile">
       {({ layout, closeMenu }) => {
         const links = (
           <TopNavLinkList
             layout={layout}
-            links={MARKETING_NAV_LINKS}
+            links={marketingNavLinks}
             onNavigate={closeMenu}
           />
         );
@@ -44,14 +46,14 @@ export function MarketingHeader() {
                   onClick={closeMenu}
                   className={topNavMobileSecondaryClassName}
                 >
-                  Log in
+                  {t("nav.login")}
                 </LocalizedLink>
                 <LocalizedLink
                   href="/signup"
                   onClick={closeMenu}
                   className={topNavMobileCtaClassName}
                 >
-                  Sign up
+                  {t("nav.signup")}
                 </LocalizedLink>
               </div>
             </>
@@ -68,10 +70,10 @@ export function MarketingHeader() {
             <div className={topNavDesktopActionsClassName}>
               <LocaleSwitcher />
               <LocalizedLink href="/login" className={topNavSecondaryClassName}>
-                Log in
+                {t("nav.login")}
               </LocalizedLink>
               <LocalizedLink href="/signup" className={topNavCtaClassName}>
-                Sign up
+                {t("nav.signup")}
               </LocalizedLink>
             </div>
           </>

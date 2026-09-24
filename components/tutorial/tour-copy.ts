@@ -12,42 +12,42 @@ export const TUTORIAL_SPOTLIGHT_KEYS = [
 
 export type TutorialSpotlightKey = (typeof TUTORIAL_SPOTLIGHT_KEYS)[number];
 
-export const TUTORIAL_SLIDES: Record<
+export const TUTORIAL_SLIDE_MESSAGE_KEYS: Record<
   TutorialSlideKey,
   { title: string; body: string }
 > = {
   welcome: {
-    title: "Welcome to SaaS Template",
-    body: "A Next.js starter with auth, billing, and a working demo feature — Notes — so you can see everything wired together.",
+    title: "tutorial.slideWelcomeTitle",
+    body: "tutorial.slideWelcomeBody",
   },
   notes: {
-    title: "Create and manage notes",
-    body: "Notes is the demo feature. It proves your auth and billing gates work end to end before you build the real product.",
+    title: "tutorial.slideNotesTitle",
+    body: "tutorial.slideNotesBody",
   },
   notify: {
-    title: "Stay in the loop",
-    body: "Enable push notifications from Settings to see how the notification pipeline works.",
+    title: "tutorial.slideNotifyTitle",
+    body: "tutorial.slideNotifyBody",
   },
 };
 
-export const TUTORIAL_SPOTLIGHT: Record<
+export const TUTORIAL_SPOTLIGHT_MESSAGE_KEYS: Record<
   TutorialSpotlightKey,
   { title: string; body: string }
 > = {
   "nav-home": {
-    title: "Home",
-    body: "Your dashboard overview lives here.",
+    title: "tutorial.spotHomeTitle",
+    body: "tutorial.spotHomeBody",
   },
   "nav-notes": {
-    title: "Notes",
-    body: "Create, edit, and delete notes — the demo feature for this template.",
+    title: "tutorial.spotNotesTitle",
+    body: "tutorial.spotNotesBody",
   },
   "nav-settings": {
-    title: "Settings",
-    body: "Manage your account and notification preferences.",
+    title: "tutorial.spotSettingsTitle",
+    body: "tutorial.spotSettingsBody",
   },
   "nav-billing": {
-    title: "Billing",
-    body: "Upgrade your plan or manage your subscription via the Stripe customer portal.",
+    title: "tutorial.spotBillingTitle",
+    body: "tutorial.spotBillingBody",
   },
 };

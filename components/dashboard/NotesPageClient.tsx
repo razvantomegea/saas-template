@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
 import { PageSkeleton } from "@/components/dashboard/PageSkeleton";
+import { useT } from "@/components/i18n/LocaleProvider";
 import { DataTestId } from "@/lib/constants/data-test-id";
 import { UNLIMITED_NOTE_LIMIT } from "@/lib/subscription/plan-limits";
 
@@ -14,22 +15,21 @@ type NoteItem = {
   createdAt: string;
 };
 
-async function fetchNotes(): Promise<{ notes: NoteItem[]; limit: number }> {
-  const response = await fetch("/api/notes");
-  if (!response.ok) {
-    throw new Error("Failed to load notes");
-  }
-  return response.json();
-}
-
 export function NotesPageClient() {
+  const t = useT();
   const queryClient = useQueryClient();
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
 
   const { data, isLoading } = useQuery({
     queryKey: ["notes"],
-    queryFn: fetchNotes,
+    queryFn: async () => {
+      const response = await fetch("/api/notes");
+      if (!response.ok) {
+        throw new Error(t("notes.loadFailed"));
+      }
+      return response.json() as Promise<{ notes: NoteItem[]; limit: number }>;
+    },
   });
 
   const createNote = useMutation({
@@ -41,7 +41,7 @@ export function NotesPageClient() {
       });
       if (!response.ok) {
         const payload = await response.json().catch(() => ({}));
-        throw new Error(payload.error ?? "Failed to create note");
+        throw new Error(payload.error ?? t("notes.createFailed"));
       }
       return response.json();
     },
@@ -57,12 +57,12 @@ export function NotesPageClient() {
     mutationFn: async (id: string) => {
       const response = await fetch(`/api/notes/${id}`, { method: "DELETE" });
       if (!response.ok) {
-        throw new Error("Failed to delete note");
+        throw new Error(t("notes.deleteFailed"));
       }
     },
     onSuccess: () =>
       void queryClient.invalidateQueries({ queryKey: ["notes"] }),
-    onError: () => toast.error("Failed to delete note"),
+    onError: () => toast.error(t("notes.deleteFailed")),
   });
 
   if (isLoading) {
@@ -72,14 +72,17 @@ export function NotesPageClient() {
   const notes = data?.notes ?? [];
   const limit = data?.limit ?? 0;
   const atLimit = notes.length >= limit;
-  const limitLabel = limit >= UNLIMITED_NOTE_LIMIT ? "unlimited" : limit;
+  const limitLabel =
+    limit >= UNLIMITED_NOTE_LIMIT ? t("common.unlimited") : String(limit);
 
   return (
     <div className="mx-auto max-w-3xl space-y-8 px-4 py-10 sm:px-6">
       <header>
-        <h1 className="text-2xl font-semibold text-zinc-100">Notes</h1>
+        <h1 className="text-2xl font-semibold text-zinc-100">
+          {t("notes.title")}
+        </h1>
         <p className="mt-2 text-sm text-zinc-400">
-          {notes.length} of {limitLabel} notes used.
+          {t("notes.used", { count: notes.length, limit: limitLabel })}
         </p>
       </header>
 
@@ -96,14 +99,14 @@ export function NotesPageClient() {
           data-testid={DataTestId.NoteTitleInput}
           value={title}
           onChange={(event) => setTitle(event.target.value)}
-          placeholder="Title"
+          placeholder={t("notes.titlePlaceholder")}
           className="w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm outline-none focus:border-emerald-600"
         />
         <textarea
           data-testid={DataTestId.NoteBodyInput}
           value={body}
           onChange={(event) => setBody(event.target.value)}
-          placeholder="Write something…"
+          placeholder={t("notes.bodyPlaceholder")}
           rows={3}
           className="w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm outline-none focus:border-emerald-600"
         />
@@ -114,10 +117,10 @@ export function NotesPageClient() {
           className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500 disabled:opacity-50"
         >
           {atLimit
-            ? "Note limit reached"
+            ? t("notes.limitReached")
             : createNote.isPending
-              ? "Saving…"
-              : "Add note"}
+              ? t("common.saving")
+              : t("notes.add")}
         </button>
       </form>
 
@@ -140,14 +143,12 @@ export function NotesPageClient() {
               onClick={() => deleteNote.mutate(note.id)}
               className="shrink-0 text-sm text-red-400 hover:text-red-300"
             >
-              Delete
+              {t("common.delete")}
             </button>
           </li>
         ))}
         {notes.length === 0 ? (
-          <p className="text-sm text-zinc-500">
-            No notes yet — create your first one above.
-          </p>
+          <p className="text-sm text-zinc-500">{t("notes.empty")}</p>
         ) : null}
       </ul>
     </div>

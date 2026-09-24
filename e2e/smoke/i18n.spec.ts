@@ -24,3 +24,14 @@ test("German privacy page shows translated title and disclaimer", async ({
   await expect(byTestId(page, DataTestId.PrivacyTitle)).toBeVisible();
   await expect(byTestId(page, DataTestId.PrivacyDisclaimer)).toBeVisible();
 });
+
+test("German marketing nav uses translated Pricing label", async ({ page }) => {
+  await page.goto("/de");
+
+  await expect(
+    page.getByRole("navigation").getByRole("link", { name: "Preise" }).first(),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Start free trial" }),
+  ).toBeVisible();
+});

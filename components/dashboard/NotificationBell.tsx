@@ -2,6 +2,7 @@
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { useT } from "@/components/i18n/LocaleProvider";
 
 type NotificationItem = {
   id: string;
@@ -17,20 +18,19 @@ type NotificationsResponse = {
   unreadCount: number;
 };
 
-async function fetchNotifications(): Promise<NotificationsResponse> {
-  const response = await fetch("/api/notifications");
-  if (!response.ok) {
-    throw new Error("Failed to load notifications");
-  }
-  return response.json();
-}
-
 export function NotificationBell({ layout }: { layout: "desktop" | "mobile" }) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
   const { data } = useQuery({
     queryKey: ["notifications"],
-    queryFn: fetchNotifications,
+    queryFn: async () => {
+      const response = await fetch("/api/notifications");
+      if (!response.ok) {
+        throw new Error(t("notifications.loadFailed"));
+      }
+      return response.json() as Promise<NotificationsResponse>;
+    },
     staleTime: 30_000,
     refetchInterval: 60_000,
   });
@@ -56,7 +56,7 @@ export function NotificationBell({ layout }: { layout: "desktop" | "mobile" }) {
         type="button"
         onClick={() => void markAllRead()}
         className="relative rounded-lg p-2 text-zinc-400 hover:bg-zinc-900 hover:text-zinc-100"
-        aria-label="Notifications"
+        aria-label={t("notifications.ariaLabel")}
       >
         <svg
           aria-hidden="true"
@@ -93,7 +93,9 @@ export function NotificationBell({ layout }: { layout: "desktop" | "mobile" }) {
               ))}
             </ul>
           ) : (
-            <p className="p-2 text-sm text-zinc-500">No notifications yet.</p>
+            <p className="p-2 text-sm text-zinc-500">
+              {t("notifications.empty")}
+            </p>
           )}
         </div>
       ) : null}

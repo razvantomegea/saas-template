@@ -1,16 +1,21 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
 import {
   AUTH_INPUT_CLASS_NAME,
   AUTH_SUBMIT_CLASS_NAME,
 } from "@/components/auth/auth-form-styles";
-import { requestPasswordResetEmail } from "@/components/auth/password-reset-actions";
+import {
+  passwordResetErrorMessage,
+  requestPasswordResetEmail,
+} from "@/components/auth/password-reset-actions";
+import { LocalizedLink } from "@/components/i18n/LocalizedLink";
+import { useT } from "@/components/i18n/LocaleProvider";
 import { DataTestId } from "@/lib/constants/data-test-id";
 
 export function ForgotPasswordForm() {
+  const t = useT();
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -27,7 +32,7 @@ export function ForgotPasswordForm() {
       const result = await requestPasswordResetEmail({ email, redirectTo });
 
       if (result.type === "error") {
-        toast.error(result.message);
+        toast.error(passwordResetErrorMessage(t, result.code, result.message));
         return;
       }
 
@@ -41,10 +46,8 @@ export function ForgotPasswordForm() {
   return (
     <div className="mx-auto w-full max-w-md space-y-6">
       <div className="space-y-2 text-center">
-        <h1 className="text-2xl font-semibold">Forgot your password?</h1>
-        <p className="text-sm text-zinc-500">
-          Enter your email and we&apos;ll send you a reset link.
-        </p>
+        <h1 className="text-2xl font-semibold">{t("auth.forgotTitle")}</h1>
+        <p className="text-sm text-zinc-500">{t("auth.forgotSubtitle")}</p>
       </div>
 
       {success ? (
@@ -52,7 +55,7 @@ export function ForgotPasswordForm() {
           className="rounded-lg border border-emerald-800/60 bg-emerald-950/40 px-4 py-3 text-sm text-emerald-200"
           data-testid={DataTestId.ForgotPasswordSuccess}
         >
-          Check your email for a reset link.
+          {t("auth.forgotSuccess")}
         </p>
       ) : (
         <form
@@ -64,7 +67,7 @@ export function ForgotPasswordForm() {
               htmlFor="forgot-password-email"
               className="block text-sm text-zinc-400"
             >
-              Email
+              {t("auth.email")}
             </label>
             <input
               id="forgot-password-email"
@@ -83,15 +86,18 @@ export function ForgotPasswordForm() {
             className={AUTH_SUBMIT_CLASS_NAME}
             data-testid={DataTestId.ForgotPasswordSubmit}
           >
-            {isSubmitting ? "Sending…" : "Send reset link"}
+            {isSubmitting ? t("common.sending") : t("auth.submitForgot")}
           </button>
         </form>
       )}
 
       <p className="text-center text-sm text-zinc-500">
-        <Link href="/login" className="text-emerald-400 hover:underline">
-          Back to log in
-        </Link>
+        <LocalizedLink
+          href="/login"
+          className="text-emerald-400 hover:underline"
+        >
+          {t("auth.forgotBackToLogin")}
+        </LocalizedLink>
       </p>
     </div>
   );

@@ -2,6 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
+import { useT } from "@/components/i18n/LocaleProvider";
 import { Logo } from "@/components/marketing/Logo";
 import {
   topNavDesktopNavClassName,
@@ -53,6 +54,7 @@ export function TopNavShell({
   mobileNavId,
   children,
 }: TopNavShellProps) {
+  const t = useT();
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuPathname, setMenuPathname] = useState(pathname);
@@ -75,7 +77,10 @@ export function TopNavShell({
         className={`mx-auto flex ${maxWidthClass} items-center justify-between gap-4 px-4 py-3.5 sm:px-6`}
       >
         <Logo href={logoHref} />
-        <nav className={topNavDesktopNavClassName} aria-label="Primary">
+        <nav
+          className={topNavDesktopNavClassName}
+          aria-label={t("nav.primaryNav")}
+        >
           {children({ layout: "desktop" })}
         </nav>
         <button
@@ -83,7 +88,7 @@ export function TopNavShell({
           className={`rounded-lg p-2 text-zinc-400 transition-colors hover:bg-zinc-900 hover:text-zinc-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600/60 ${topNavMobileOnlyClassName}`}
           aria-expanded={menuOpen}
           aria-controls={mobileNavId}
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          aria-label={menuOpen ? t("nav.closeMenu") : t("nav.openMenu")}
           data-testid={DataTestId.NavMenuToggle}
           onClick={() => setMenuOpen((open) => !open)}
         >
@@ -92,7 +97,7 @@ export function TopNavShell({
       </div>
       <nav
         id={mobileNavId}
-        aria-label="Mobile"
+        aria-label={t("nav.mobileNav")}
         className={`border-t border-zinc-800/80 bg-zinc-950 ${topNavMobileOnlyClassName} ${menuOpen ? "block" : "hidden"}`}
       >
         <div className={`${topNavMobilePanelClassName} ${maxWidthClass}`}>

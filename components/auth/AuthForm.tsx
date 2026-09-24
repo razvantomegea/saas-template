@@ -7,6 +7,7 @@ import {
   performEmailAuth,
   performGoogleAuth,
 } from "@/components/auth/auth-form-actions";
+import { PASSWORD_UPDATED_MESSAGE_CODE } from "@/components/auth/auth-form-styles";
 import { AuthFormFields } from "@/components/auth/AuthFormFields";
 import type { SignupTermsConsentHandle } from "@/components/auth/SignupTermsConsent";
 import { LocalizedLink } from "@/components/i18n/LocalizedLink";
@@ -73,11 +74,15 @@ function AuthFormContent({ mode }: AuthFormProps) {
   );
   const oauthErrorCode = searchParams.get("error");
   const oauthErrorDescription = searchParams.get("error_description");
+  const rawSuccessMessage = searchParams.get("message");
   const successMessage =
-    searchParams.get("message") ??
-    (searchParams.get("accountDeleted") === "1"
-      ? t("auth.accountDeleted")
-      : null);
+    rawSuccessMessage === PASSWORD_UPDATED_MESSAGE_CODE ||
+    rawSuccessMessage === t("auth.passwordUpdatedCode")
+      ? t("auth.passwordUpdated")
+      : (rawSuccessMessage ??
+        (searchParams.get("accountDeleted") === "1"
+          ? t("auth.accountDeleted")
+          : null));
   const oauthError = mapOAuthError(oauthErrorCode, oauthErrorDescription);
   const authErrorTestId =
     mode === "signup" ? DataTestId.SignupAuthError : DataTestId.LoginAuthError;

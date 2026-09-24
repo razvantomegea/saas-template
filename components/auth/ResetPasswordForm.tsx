@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 import { toast } from "sonner";
@@ -8,9 +7,14 @@ import {
   AUTH_INPUT_CLASS_NAME,
   AUTH_SUBMIT_CLASS_NAME,
   MIN_PASSWORD_LENGTH,
-  PASSWORD_UPDATED_MESSAGE,
+  PASSWORD_UPDATED_MESSAGE_CODE,
 } from "@/components/auth/auth-form-styles";
-import { submitPasswordReset } from "@/components/auth/password-reset-actions";
+import {
+  passwordResetErrorMessage,
+  submitPasswordReset,
+} from "@/components/auth/password-reset-actions";
+import { LocalizedLink } from "@/components/i18n/LocalizedLink";
+import { useT } from "@/components/i18n/LocaleProvider";
 import { DataTestId } from "@/lib/constants/data-test-id";
 
 export function ResetPasswordForm() {
@@ -22,17 +26,19 @@ export function ResetPasswordForm() {
 }
 
 function ResetPasswordFormFallback() {
+  const t = useT();
   return (
     <div className="mx-auto w-full max-w-md space-y-6">
       <div className="space-y-2 text-center">
-        <h1 className="text-2xl font-semibold">Reset your password</h1>
-        <p className="text-sm text-zinc-500">Loading…</p>
+        <h1 className="text-2xl font-semibold">{t("auth.resetTitle")}</h1>
+        <p className="text-sm text-zinc-500">{t("common.loading")}</p>
       </div>
     </div>
   );
 }
 
 function ResetPasswordFormContent() {
+  const t = useT();
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
@@ -50,14 +56,12 @@ function ResetPasswordFormContent() {
     }
 
     if (password.length < MIN_PASSWORD_LENGTH) {
-      toast.error(
-        `Password must be at least ${MIN_PASSWORD_LENGTH} characters.`,
-      );
+      toast.error(t("auth.passwordTooShort", { min: MIN_PASSWORD_LENGTH }));
       return;
     }
 
     if (password !== confirmPassword) {
-      toast.error("Passwords do not match.");
+      toast.error(t("auth.passwordMismatch"));
       return;
     }
 
@@ -69,12 +73,12 @@ function ResetPasswordFormContent() {
       });
 
       if (result.type === "error") {
-        toast.error(result.message);
+        toast.error(passwordResetErrorMessage(t, result.code, result.message));
         return;
       }
 
       router.push(
-        `/login?message=${encodeURIComponent(PASSWORD_UPDATED_MESSAGE)}`,
+        `/login?message=${encodeURIComponent(PASSWORD_UPDATED_MESSAGE_CODE)}`,
       );
     } finally {
       setIsSubmitting(false);
@@ -84,22 +88,22 @@ function ResetPasswordFormContent() {
   return (
     <div className="mx-auto w-full max-w-md space-y-6">
       <div className="space-y-2 text-center">
-        <h1 className="text-2xl font-semibold">Reset your password</h1>
-        <p className="text-sm text-zinc-500">Choose a new password below.</p>
+        <h1 className="text-2xl font-semibold">{t("auth.resetTitle")}</h1>
+        <p className="text-sm text-zinc-500">{t("auth.resetSubtitle")}</p>
       </div>
 
       {invalidToken ? (
         <div className="space-y-4">
           <p className="rounded-lg border border-red-900/60 bg-red-950/40 px-4 py-3 text-sm text-red-200">
-            This reset link is invalid or has expired.
+            {t("auth.invalidReset")}
           </p>
           <p className="text-center text-sm text-zinc-500">
-            <Link
+            <LocalizedLink
               href="/forgot-password"
               className="text-emerald-400 hover:underline"
             >
-              Request a new link
-            </Link>
+              {t("auth.resetRequestNewLink")}
+            </LocalizedLink>
           </p>
         </div>
       ) : (
@@ -112,7 +116,7 @@ function ResetPasswordFormContent() {
               htmlFor="reset-password-new"
               className="block text-sm text-zinc-400"
             >
-              New password
+              {t("auth.resetNewPassword")}
             </label>
             <input
               id="reset-password-new"
@@ -131,7 +135,7 @@ function ResetPasswordFormContent() {
               htmlFor="reset-password-confirm"
               className="block text-sm text-zinc-400"
             >
-              Confirm password
+              {t("auth.confirmPassword")}
             </label>
             <input
               id="reset-password-confirm"
@@ -151,15 +155,18 @@ function ResetPasswordFormContent() {
             className={AUTH_SUBMIT_CLASS_NAME}
             data-testid={DataTestId.ResetPasswordSubmit}
           >
-            {isSubmitting ? "Saving…" : "Reset password"}
+            {isSubmitting ? t("common.saving") : t("auth.submitReset")}
           </button>
         </form>
       )}
 
       <p className="text-center text-sm text-zinc-500">
-        <Link href="/login" className="text-emerald-400 hover:underline">
-          Back to log in
-        </Link>
+        <LocalizedLink
+          href="/login"
+          className="text-emerald-400 hover:underline"
+        >
+          {t("auth.forgotBackToLogin")}
+        </LocalizedLink>
       </p>
     </div>
   );

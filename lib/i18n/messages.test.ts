@@ -26,11 +26,15 @@ describe("i18n messages", () => {
     expect(getMessages("en").nav.pricing).toBe("Pricing");
     expect(getMessages("de").nav.pricing).toBe("Preise");
     expect(getMessages("de").dashboard.title).toBe(LEGAL_PRODUCT_NAME);
+    expect(getMessages("en").notes.title).toBe("Notes");
+    expect(getMessages("en").home.ctaTrial).toBe("Start free trial");
   });
 
   it("translates with vars and falls back to path", () => {
     const t = getTranslator("en");
-    expect(t("dashboard.closedTrades", { count: 3 })).toBe("3 closed trades");
+    expect(t("notes.used", { count: 3, limit: 25 })).toBe(
+      "3 of 25 notes used.",
+    );
     expect(t("missing.key")).toBe("missing.key");
   });
 

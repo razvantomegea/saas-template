@@ -4,34 +4,54 @@ export type StripePlanKey = "starter" | "pro";
 
 export type PlanDisplayConfig = {
   key: StripePlanKey;
-  name: string;
-  tagline: string;
-  features: string[];
+  nameKey: string;
+  taglineKey: string;
+  featureKeys: string[];
   pricing: {
     monthly: { priceDisplay: string; trialDays: number };
-    annual: { priceDisplay: string; savings: string; trialDays: number };
+    annual: {
+      priceDisplay: string;
+      savingsKey: string;
+      trialDays: number;
+    };
   };
 };
 
 export const planDisplayConfigs: PlanDisplayConfig[] = [
   {
     key: "starter",
-    name: "Starter",
-    tagline: "For individuals getting started",
-    features: ["Up to 25 notes", "Email support", "Core dashboard"],
+    nameKey: "pricing.starterName",
+    taglineKey: "pricing.starterTagline",
+    featureKeys: [
+      "pricing.starterFeatureNotes",
+      "pricing.starterFeatureSupport",
+      "pricing.starterFeatureDashboard",
+    ],
     pricing: {
       monthly: { priceDisplay: "$9", trialDays: 14 },
-      annual: { priceDisplay: "$90", savings: "Save ~$18", trialDays: 14 },
+      annual: {
+        priceDisplay: "$90",
+        savingsKey: "pricing.starterSavings",
+        trialDays: 14,
+      },
     },
   },
   {
     key: "pro",
-    name: "Pro",
-    tagline: "For growing teams",
-    features: ["Unlimited notes", "Priority support", "Push notifications"],
+    nameKey: "pricing.proName",
+    taglineKey: "pricing.proTagline",
+    featureKeys: [
+      "pricing.proFeatureNotes",
+      "pricing.proFeatureSupport",
+      "pricing.proFeaturePush",
+    ],
     pricing: {
       monthly: { priceDisplay: "$29", trialDays: 14 },
-      annual: { priceDisplay: "$290", savings: "Save ~$58", trialDays: 14 },
+      annual: {
+        priceDisplay: "$290",
+        savingsKey: "pricing.proSavings",
+        trialDays: 14,
+      },
     },
   },
 ];

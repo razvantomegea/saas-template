@@ -1,25 +1,34 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { AuthForm } from "@/components/auth/AuthForm";
+import { LocalizedLink } from "@/components/i18n/LocalizedLink";
 import { MarketingFooter } from "@/components/marketing/MarketingFooter";
 import { MarketingHeader } from "@/components/marketing/MarketingHeader";
-import { createSiteMetadata } from "@/lib/seo/site";
+import { createLocalizedPageMetadata } from "@/lib/i18n/metadata";
+import { getPageIntl } from "@/lib/i18n/page-intl";
 
-export const metadata: Metadata = createSiteMetadata({
-  title: "Log in",
-  robots: { index: false, follow: true },
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { locale } = await getPageIntl();
+  return {
+    ...createLocalizedPageMetadata({
+      locale,
+      pathname: "/login",
+      page: "login",
+    }),
+    robots: { index: false, follow: true },
+  };
+}
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const { t } = await getPageIntl();
   return (
     <div className="flex min-h-full flex-col">
       <MarketingHeader />
       <main className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6">
         <AuthForm mode="login" />
         <p className="mt-8 text-center text-sm text-zinc-500">
-          <Link href="/" className="hover:text-zinc-300">
-            ← Back
-          </Link>
+          <LocalizedLink href="/" className="hover:text-zinc-300">
+            {t("common.backHome")}
+          </LocalizedLink>
         </p>
       </main>
       <MarketingFooter />

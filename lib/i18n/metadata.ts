@@ -30,37 +30,32 @@ type SeoPageContent = {
 
 function resolveSeoPage(locale: AppLocale, page: SeoPageKey): SeoPageContent {
   const messages = getMessages(locale);
-  const siteDescription =
-    "SaaS Template ships Better Auth, Stripe billing, Supabase Postgres, and a demo Notes feature.";
 
   switch (page) {
     case "home":
       return {
-        title: `${BRAND_NAME} — Ship your SaaS faster`,
-        description: siteDescription,
+        title: messages.home.seoTitle,
+        description: messages.home.seoDescription,
       };
     case "pricing":
       return {
-        title: messages.pricing?.title ?? "Pricing",
-        description:
-          messages.pricing?.subtitle ?? "Simple plans for your SaaS product.",
+        title: messages.pricing.title,
+        description: messages.pricing.subtitle,
       };
     case "help":
       return {
-        title: messages.help?.title ?? "Help",
-        description: messages.help?.subtitle ?? "FAQ and support.",
+        title: messages.help.title,
+        description: messages.help.subtitle,
       };
     case "login":
       return {
-        title: messages.auth?.loginTitle ?? "Log in",
-        description:
-          messages.auth?.loginSubtitle ?? `Sign in to ${BRAND_NAME}.`,
+        title: messages.auth.loginTitle,
+        description: messages.auth.loginSubtitle,
       };
     case "signup":
       return {
-        title: messages.auth?.signupTitle ?? "Sign up",
-        description:
-          messages.auth?.signupSubtitle ?? `Create your ${BRAND_NAME} account.`,
+        title: messages.auth.signupTitle,
+        description: messages.auth.signupSubtitle,
       };
     case "privacy":
       return {
@@ -74,16 +69,19 @@ function resolveSeoPage(locale: AppLocale, page: SeoPageKey): SeoPageContent {
       };
     case "cookies":
       return {
-        title: messages.legal.cookiesTitle ?? "Cookies Policy",
+        title: messages.legal.cookiesTitle,
         description: `${BRAND_NAME} cookies policy.`,
       };
     case "dashboard":
       return {
-        title: "Dashboard",
-        description: `${BRAND_NAME} dashboard.`,
+        title: messages.dashboard.seoTitle,
+        description: messages.dashboard.seoDescription,
       };
     default:
-      return { title: BRAND_NAME, description: siteDescription };
+      return {
+        title: BRAND_NAME,
+        description: messages.home.seoDescription,
+      };
   }
 }
 

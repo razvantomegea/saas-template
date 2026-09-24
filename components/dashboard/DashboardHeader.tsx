@@ -2,6 +2,7 @@
 
 import { LogoutButton } from "@/components/auth/LogoutButton";
 import { NotificationBell } from "@/components/dashboard/NotificationBell";
+import { useT } from "@/components/i18n/LocaleProvider";
 import {
   TopNavLinkList,
   type TopNavLinkItem,
@@ -12,14 +13,27 @@ import {
   topNavMobileSectionClassName,
 } from "@/components/layout/top-nav-styles";
 
-const NAV_LINKS: TopNavLinkItem[] = [
-  { href: "/dashboard", label: "Home", dataTour: "nav-home" },
-  { href: "/dashboard/notes", label: "Notes", dataTour: "nav-notes" },
-  { href: "/dashboard/settings", label: "Settings", dataTour: "nav-settings" },
-  { href: "/dashboard/billing", label: "Billing", dataTour: "nav-billing" },
-];
-
 export function DashboardHeader() {
+  const t = useT();
+  const navLinks: TopNavLinkItem[] = [
+    { href: "/dashboard", label: t("nav.home"), dataTour: "nav-home" },
+    {
+      href: "/dashboard/notes",
+      label: t("nav.notes"),
+      dataTour: "nav-notes",
+    },
+    {
+      href: "/dashboard/settings",
+      label: t("nav.settings"),
+      dataTour: "nav-settings",
+    },
+    {
+      href: "/dashboard/billing",
+      label: t("nav.billing"),
+      dataTour: "nav-billing",
+    },
+  ];
+
   return (
     <TopNavShell
       logoHref="/dashboard"
@@ -30,7 +44,7 @@ export function DashboardHeader() {
         const links = (
           <TopNavLinkList
             layout={layout}
-            links={NAV_LINKS}
+            links={navLinks}
             onNavigate={closeMenu}
           />
         );
