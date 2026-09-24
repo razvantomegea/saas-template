@@ -1,0 +1,35 @@
+{
+  "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
+  "entry": [
+    "scripts/bump-version.mjs",
+    "scripts/release-on-main.mjs",
+    "scripts/setup-git-hooks.mjs",
+    "scripts/append-release-coverage.mjs",
+    "scripts/coverage-release-summary.mjs",
+    "scripts/prepare-e2e-dev.mjs"
+  ],
+  "workspaces": {
+    "packages": ["."]
+  },
+  "duplicates": {
+    "minOccurrences": 3
+  },
+  "health": {
+    "thresholdOverrides": [
+      {
+        "files": ["**/*.test.ts", "**/*.test.tsx", "e2e/**"],
+        "maxUnitSize": 500,
+        "reason": "Test suites: describe/it blocks are long by design"
+      }
+    ]
+  },
+  "audit": {
+    "gate": "new-only",
+    "healthBaseline": ".fallow-baselines/health.json",
+    "deadCodeBaseline": ".fallow-baselines/dead-code.json",
+    "dupesBaseline": ".fallow-baselines/dupes.json"
+  },
+  "rules": {
+    "unused-dependencies": "warn"
+  }
+}

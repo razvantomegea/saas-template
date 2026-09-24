@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SaaS Template
 
-## Getting Started
+A reusable Next.js SaaS starter with auth, billing, push notifications, PWA
+install, 11-locale i18n, light/dark/system theme, legal + cookie consent,
+help/support, and a working demo feature (**Notes**) that proves the auth and
+billing gates work end to end.
 
-First, run the development server:
+Extracted from production apps — see `docs/adr/001-stack.md` for stack
+rationale and `AGENTS.md` for agent-facing conventions.
+
+## Stack
+
+- **Framework:** Next.js 16 (App Router), React 19, Tailwind 4, TypeScript strict
+- **Auth:** [Better Auth](https://www.better-auth.com/) (email/password + optional Google OAuth)
+- **Database:** Supabase Postgres via [Drizzle ORM](https://orm.drizzle.team/)
+- **Billing:** Stripe (Checkout + Customer Portal + webhooks)
+- **Email:** Resend
+- **Push:** Web Push (VAPID) with an SSRF-safe endpoint allowlist
+- **i18n:** 11 locales with URL prefix routing + LocaleSwitcher
+- **Theme:** system / light / dark (FOUC-safe bootstrap)
+- **Deploy:** Vercel, with Analytics + Speed Insights gated on cookie consent
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
+cp .env.example .env.local   # fill in the values you need
+pnpm db:push                 # or db:generate + db:migrate for versioned migrations
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+See `docs/setup.md` for the full checklist (Supabase, Better Auth, Stripe,
+Resend, VAPID, legal constants, optional Gemini key, CI/release).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Scripts
 
-## Learn More
+| Command                               | What it does                                 |
+| ------------------------------------- | -------------------------------------------- |
+| `pnpm dev`                            | Start the Next.js dev server                 |
+| `pnpm build`                          | Production build + `tsc --noEmit` type check |
+| `pnpm lint` / `lint:fix`              | ESLint                                       |
+| `pnpm format`                         | Prettier write                               |
+| `pnpm test` / `test:coverage`         | Vitest (+ coverage thresholds)               |
+| `pnpm test:e2e`                       | Playwright smoke (`E2E_MOCK_DASHBOARD`)      |
+| `pnpm fallow` / `fallow:audit`        | Fallow health / dead-code audit              |
+| `pnpm version:bump` / `version:check` | Sync `package.json` + `lib/app-version.ts`   |
+| `pnpm prerelease`                     | Full local gate before release               |
+| `pnpm db:*`                           | Drizzle generate / migrate / push / studio   |
 
-To learn more about Next.js, take a look at the following resources:
+## Project layout
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+app/                  Routes — marketing, auth, legal, help, dashboard, API
+components/           UI by domain (auth, help, legal, i18n, theme, pwa, …)
+db/                   Drizzle schema (auth, billing, push, notes, supportTickets)
+lib/                  Core modules — auth, stripe, i18n, legal, help, theme, …
+scripts/              version bump, release, e2e prepare, git hooks
+e2e/                  Playwright smoke specs
+docs/                 Setup guide + ADRs
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Demo feature: Notes
 
-## Deploy on Vercel
+`notes` + `lib/notes/queries.ts` + `app/dashboard/notes/` + `app/api/notes/*`
+is a minimal CRUD feature gated by plan. Replace it once you do not need the
+reference anymore.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Branding & legal
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Swap `lib/constants/branding.ts` and `components/marketing/Logo.tsx`.
+- **Replace** `lib/legal/constants.ts` and lawyer-review policies before go-live.

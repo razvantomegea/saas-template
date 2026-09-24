@@ -1,0 +1,259 @@
+{
+  "finding_counts": {
+    "app/api/create-checkout-session/route.ts": {
+      "complexity_critical": {
+        "count": 1
+      },
+      "crap_critical": {
+        "count": 1
+      }
+    },
+    "app/api/help/chat/route.ts": {
+      "crap_critical": {
+        "count": 1
+      }
+    },
+    "app/api/manage-subscription/route.ts": {
+      "crap_high": {
+        "count": 1
+      }
+    },
+    "app/api/push/subscribe/route.ts": {
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "app/api/push/unsubscribe/route.ts": {
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "app/api/stripe-webhook/route.ts": {
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "app/api/support/route.ts": {
+      "crap_high": {
+        "count": 1
+      }
+    },
+    "app/cookies/page.tsx": {
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "app/dashboard/billing/page.tsx": {
+      "crap_critical": {
+        "count": 1
+      }
+    },
+    "app/dashboard/page.tsx": {
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "app/help/page.tsx": {
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "components/analytics/CookieConsentBanner.tsx": {
+      "crap_high": {
+        "count": 1
+      }
+    },
+    "components/auth/AuthForm.tsx": {
+      "crap_critical": {
+        "count": 1
+      }
+    },
+    "components/auth/AuthFormFields.tsx": {
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "components/auth/ResetPasswordForm.tsx": {
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "components/auth/auth-form-actions.ts": {
+      "crap_critical": {
+        "count": 1
+      },
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "components/auth/password-reset-actions.ts": {
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "components/dashboard/BillingPageClient.tsx": {
+      "crap_moderate": {
+        "count": 2
+      }
+    },
+    "components/dashboard/NotesPageClient.tsx": {
+      "crap_critical": {
+        "count": 1
+      }
+    },
+    "components/dashboard/NotificationBell.tsx": {
+      "crap_high": {
+        "count": 1
+      }
+    },
+    "components/help/HelpChat.tsx": {
+      "crap_high": {
+        "count": 1
+      }
+    },
+    "components/help/SupportForm.tsx": {
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "components/pwa/install-tutorial.tsx": {
+      "crap_critical": {
+        "count": 1
+      }
+    },
+    "components/tutorial/spotlight-tour.tsx": {
+      "crap_high": {
+        "count": 1
+      }
+    },
+    "components/tutorial/tutorial-provider.tsx": {
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "components/ui/Select.tsx": {
+      "complexity_moderate": {
+        "count": 1
+      },
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "lib/better-auth/client.ts": {
+      "crap_high": {
+        "count": 1
+      }
+    },
+    "lib/better-auth/resolve-callback-url.ts": {
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "lib/dashboard/session.ts": {
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "lib/help/help-bot-markdown.tsx": {
+      "complexity_high": {
+        "count": 1
+      },
+      "crap_high": {
+        "count": 1
+      }
+    },
+    "lib/i18n/metadata.ts": {
+      "complexity_critical": {
+        "count": 1
+      },
+      "crap_critical": {
+        "count": 1
+      }
+    },
+    "lib/notifications/enable-push.ts": {
+      "crap_critical": {
+        "count": 1
+      },
+      "crap_high": {
+        "count": 1
+      },
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "lib/notifications/push-endpoint.ts": {
+      "complexity_critical": {
+        "count": 1
+      },
+      "crap_critical": {
+        "count": 1
+      },
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "lib/notifications/web-push.ts": {
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "lib/resolve-origin.ts": {
+      "crap_high": {
+        "count": 1
+      }
+    },
+    "lib/security/require-trusted-origin.ts": {
+      "crap_high": {
+        "count": 1
+      }
+    },
+    "lib/seo/json-ld.ts": {
+      "crap_high": {
+        "count": 1
+      },
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "lib/stripe/confirm-checkout.ts": {
+      "crap_high": {
+        "count": 1
+      }
+    },
+    "lib/stripe/subscription-helpers.ts": {
+      "crap_high": {
+        "count": 1
+      }
+    },
+    "lib/stripe/webhook-handlers.ts": {
+      "crap_high": {
+        "count": 3
+      },
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "proxy.ts": {
+      "crap_critical": {
+        "count": 1
+      }
+    },
+    "public/sw.js": {
+      "crap_high": {
+        "count": 1
+      }
+    }
+  },
+  "runtime_coverage_findings": [],
+  "target_keys": [
+    "lib/subscription/profiles.ts:dead code",
+    "db/index.ts:dead code",
+    "lib/notifications/web-push.ts:dead code",
+    "components/ui/Select.tsx:dead code",
+    "lib/i18n/messages.ts:dead code",
+    "lib/notifications/enable-push.ts:dead code",
+    "lib/app-version.ts:dead code",
+    "lib/pwa/config.ts:dead code",
+    "lib/notifications/push-endpoint.ts:untested risk"
+  ]
+}

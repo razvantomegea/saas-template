@@ -1,0 +1,16 @@
+.next
+.agents
+.fallow
+.githooks
+.github
+docs
+coverage
+node_modules
+pnpm-lock.yaml
+drizzle
+generated_configs
+pine
+playwright-report
+reports
+test-results
+validate_staging
